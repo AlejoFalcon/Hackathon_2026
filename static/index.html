@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CTT - FISEI UTA | Agente IA y Dashboard de Ventas</title>
-  <meta name="description" content="Sistema Integral de Agente de IA Prospector y Dashboard de Ventas para el Centro de Transferencia y Desarrollo de Tecnologías FISEI - Universidad Técnica de Ambato.">
+  <title>CTT - FISEI UTA | Agente IA y Dashboard de Admisiones</title>
+  <meta name="description" content="Centro de Transferencia y Desarrollo de Tecnologías FISEI - Universidad Técnica de Ambato.">
   
   <!-- Font Awesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,7 +15,7 @@
 <body>
 
   <div class="app-container">
-    <!-- Sidebar -->
+    <!-- Sidebar (Clean Light Style, matching Image 2) -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand-logo-badge">UTA</div>
@@ -27,29 +27,29 @@
 
       <nav class="sidebar-menu">
         <a class="nav-item active" data-tab="tab-dashboard">
-          <i class="fa-solid fa-chart-pie"></i>
-          <span>Dashboard & KPIs</span>
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span>SALA (Dashboard)</span>
         </a>
         <a class="nav-item" data-tab="tab-pipeline">
-          <i class="fa-solid fa-users-viewfinder"></i>
-          <span>Pipeline de Ventas</span>
+          <i class="fa-solid fa-user-check"></i>
+          <span>PROSPECTOS</span>
           <span class="nav-badge" id="badge-hot-count">0</span>
         </a>
         <a class="nav-item" data-tab="tab-courses">
           <i class="fa-solid fa-graduation-cap"></i>
-          <span>Catálogo de Cursos</span>
+          <span>CURSOS</span>
         </a>
         <a class="nav-item" data-tab="tab-certificates">
-          <i class="fa-solid fa-certificate"></i>
-          <span>Validar Certificados</span>
+          <i class="fa-solid fa-stamp"></i>
+          <span>SELLOS & CERTIFICADOS</span>
         </a>
-        <a class="nav-item" data-tab="tab-simulator" id="nav-open-simulator">
-          <i class="fa-solid fa-robot"></i>
-          <span>Simulador Telegram</span>
+        <a class="nav-item" data-tab="tab-workshop" id="nav-open-workshop">
+          <i class="fa-solid fa-terminal"></i>
+          <span>TALLER DEL AGENTE</span>
         </a>
         <a class="nav-item" data-tab="tab-config">
-          <i class="fa-solid fa-sliders"></i>
-          <span>Configuración & Bot</span>
+          <i class="fa-solid fa-gear"></i>
+          <span>CONFIGURACIÓN</span>
         </a>
       </nav>
 
@@ -57,8 +57,8 @@
         <div class="bot-status-card">
           <div class="status-dot-pulse"></div>
           <div class="bot-status-info">
-            <h4>Agente IA CTT</h4>
-            <p id="bot-status-text">Activo y Prospectando</p>
+            <h4>Agente CTT-FISEI</h4>
+            <p id="bot-status-text">En línea y prospectando</p>
           </div>
         </div>
       </div>
@@ -69,16 +69,16 @@
       <!-- Topbar -->
       <header class="topbar">
         <div class="topbar-title">
-          <h2 id="page-title">Panel de Control & Inteligencia Comercial</h2>
-          <p id="page-subtitle">Monitoreo en tiempo real de prospectos y cierre de admisiones</p>
+          <span class="topbar-subtitle-tag" id="page-subtitle-tag">SISTEMA COMERCIAL CTT-FISEI</span>
+          <h2 id="page-title">Sala de Control de Admisiones</h2>
         </div>
 
         <div class="topbar-actions">
-          <button class="btn btn-secondary btn-sm" id="btn-sync-courses" title="Sincronizar cursos de ctt-talleresfisei.uta.edu.ec">
+          <button class="btn btn-secondary btn-sm" id="btn-sync-courses" title="Sincronizar cursos oficiales de la UTA">
             <i class="fa-solid fa-arrows-rotate"></i> Sincronizar CTT
           </button>
-          <button class="btn btn-primary btn-sm" id="btn-toggle-sim">
-            <i class="fa-brands fa-telegram"></i> Probar Agente IA
+          <button class="btn btn-primary btn-sm" id="btn-go-workshop">
+            <i class="fa-brands fa-telegram"></i> Probar en Taller
           </button>
         </div>
       </header>
@@ -86,7 +86,7 @@
       <!-- Content Body -->
       <main class="content-body">
         
-        <!-- Tab 1: Dashboard -->
+        <!-- Tab 1: Dashboard / Sala Principal -->
         <div id="tab-dashboard" class="tab-pane active">
           
           <!-- KPI Cards -->
@@ -94,22 +94,22 @@
             <div class="kpi-card">
               <div class="kpi-header">
                 <span class="kpi-title">Total Prospectos</span>
-                <div class="kpi-icon-badge red"><i class="fa-solid fa-users"></i></div>
+                <div class="kpi-icon-badge navy"><i class="fa-solid fa-users"></i></div>
               </div>
               <div class="kpi-value" id="kpi-total-leads">0</div>
               <div class="kpi-subtitle">
-                <span class="trend-positive"><i class="fa-solid fa-arrow-trend-up"></i> +18%</span> desde canales digitales
+                <span class="trend-positive"><i class="fa-solid fa-arrow-trend-up"></i> +18%</span> canales digitales UTA
               </div>
             </div>
 
             <div class="kpi-card highlight-hot">
               <div class="kpi-header">
                 <span class="kpi-title">A Punto de Inscribirse</span>
-                <div class="kpi-icon-badge amber"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                <div class="kpi-icon-badge red"><i class="fa-solid fa-fire"></i></div>
               </div>
-              <div class="kpi-value" id="kpi-hot-leads">0</div>
+              <div class="kpi-value" id="kpi-hot-leads" style="color: var(--uta-red);">0</div>
               <div class="kpi-subtitle">
-                <span>⚡ Alta intención de compra detectada</span>
+                <span style="color: var(--uta-red); font-weight: 700;">⚡ Alta intención de compra</span>
               </div>
             </div>
 
@@ -127,11 +127,11 @@
             <div class="kpi-card">
               <div class="kpi-header">
                 <span class="kpi-title">Interacciones del Agente</span>
-                <div class="kpi-icon-badge cyan"><i class="fa-solid fa-comments"></i></div>
+                <div class="kpi-icon-badge amber"><i class="fa-solid fa-comments"></i></div>
               </div>
               <div class="kpi-value" id="kpi-total-messages">0</div>
               <div class="kpi-subtitle">
-                <span>Respuestas automáticas 24/7</span>
+                <span>Atención automática 24/7</span>
               </div>
             </div>
           </div>
@@ -141,9 +141,9 @@
             <div class="section-banner-header">
               <div class="banner-title-group">
                 <span class="banner-badge"><i class="fa-solid fa-bolt"></i> Prioridad Alta</span>
-                <h3>Centro de Cierre Rápido: Prospectos Listos para Inscribirse</h3>
+                <h3>Cerrar Cupo: Prospectos a Punto de Inscribirse</h3>
               </div>
-              <span class="banner-desc">Clientes que solicitaron datos bancarios, subsidio UTA o formulario oficial</span>
+              <span class="banner-desc">Solicitaron cuenta bancaria, subsidio UTA o formulario oficial</span>
             </div>
 
             <div class="hot-leads-grid" id="hot-leads-container">
@@ -186,7 +186,7 @@
             <div class="card-header-bar">
               <div class="card-title-group">
                 <h3>Pipeline Integral de Prospectos</h3>
-                <p>Gestiona, califica y cierra ventas con los usuarios captados por el agente</p>
+                <p>Gestiona, califica y contacta a los usuarios captados por el agente</p>
               </div>
 
               <div class="table-controls">
@@ -227,38 +227,38 @@
           </div>
         </div>
 
-        <!-- Tab 3: Courses Catalog -->
+        <!-- Tab 3: Courses Catalog (MATCHING EXACTLY USER'S IMAGE 1) -->
         <div id="tab-courses" class="tab-pane" style="display: none;">
-          <div class="dashboard-card">
-            <div class="card-header-bar">
-              <div class="card-title-group">
-                <h3>Catálogo Oficial de Cursos CTT - FISEI UTA</h3>
-                <p>Extraído en tiempo real desde <a href="https://ctt-talleresfisei.uta.edu.ec/course.php" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">ctt-talleresfisei.uta.edu.ec</a></p>
-              </div>
-              <button class="btn btn-primary btn-sm" id="btn-sync-catalog">
-                <i class="fa-solid fa-cloud-arrow-down"></i> Sincronizar Ahora
-              </button>
-            </div>
+          <div class="section-title-wrap">
+            <p class="section-pretitle">CURSOS</p>
+            <h2 class="section-main-title">Cursos Disponibles</h2>
+          </div>
 
-            <div class="courses-grid" id="courses-grid-container">
-              <!-- Dynamically populated -->
-            </div>
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+            <button class="btn btn-primary btn-sm" id="btn-sync-catalog">
+              <i class="fa-solid fa-cloud-arrow-down"></i> Sincronizar desde ctt-talleresfisei.uta.edu.ec
+            </button>
+          </div>
+
+          <div class="courses-grid" id="courses-grid-container">
+            <!-- Dynamically populated matching Image 1 layout -->
           </div>
         </div>
 
-        <!-- Tab 4: Certificate Validator -->
+        <!-- Tab 4: Certificate Validator (Sellos y Certificados) -->
         <div id="tab-certificates" class="tab-pane" style="display: none;">
           <div class="dashboard-card">
             <div class="cert-search-container">
               <div class="card-title-group" style="text-align: center;">
-                <h2>Verificador de Certificados CTT - FISEI</h2>
-                <p>Consulta la autenticidad, horas académicas y validez de los certificados emitidos por la UTA</p>
+                <p class="section-pretitle">CERTIFICACIÓN</p>
+                <h2 style="font-size: 24px; color: var(--uta-navy); margin-bottom: 6px;">Verificador Oficial de Certificados CTT</h2>
+                <p>Comprueba la validez académica y códigos QR emitidos por la Universidad Técnica de Ambato</p>
               </div>
 
               <div class="cert-input-row">
                 <input type="text" id="cert-search-input" placeholder="Ingresa código (ej: UTA-CTT-2026-9041) o número de cédula...">
                 <button class="btn btn-primary" id="btn-search-cert">
-                  <i class="fa-solid fa-shield-check"></i> Validar
+                  <i class="fa-solid fa-circle-check"></i> Validar
                 </button>
               </div>
 
@@ -267,7 +267,92 @@
           </div>
         </div>
 
-        <!-- Tab 5: Configuration & Bot Setup -->
+        <!-- Tab 5: Taller del Agente (MATCHING EXACTLY USER'S IMAGE 2) -->
+        <div id="tab-workshop" class="tab-pane" style="display: none;">
+          <div class="workshop-container">
+            
+            <div class="workshop-header-box">
+              <div class="workshop-pretitle">TALLER · MISMO AGENTE QUE TELEGRAM</div>
+              <h2 class="workshop-title">Prueba al Asesor Virtual sin salir de la sala</h2>
+              <p class="workshop-desc">
+                Cada sesión crea un prospecto real en el CRM. Toca un atajo o escribe como lo haría un interesado.
+              </p>
+
+              <!-- Shortcut Chips (Image 2) -->
+              <div class="workshop-chips-row">
+                <button class="workshop-chip" data-query="Hola, ¿qué cursos están abiertos?">Hola, ¿qué cursos están abiertos?</button>
+                <button class="workshop-chip" data-query="Quiero Linux Essentials, soy estudiante UTA">Quiero Linux Essentials, soy estudiante UTA</button>
+                <button class="workshop-chip" data-query="¿Cuánto cuesta Python 1?">¿Cuánto cuesta Python 1?</button>
+                <button class="workshop-chip" data-query="Verificar UTA-CTT-2026-9041">Verificar UTA-CTT-2026-9041</button>
+                <button class="workshop-chip" data-query="Quiero inscribirme en CCNA">Quiero inscribirme en CCNA</button>
+              </div>
+            </div>
+
+            <div class="workshop-grid">
+              
+              <!-- Console Chat Box (Dark Navy matching Image 2) -->
+              <div class="workshop-console">
+                <div class="console-topbar">
+                  <span class="console-title"><i class="fa-brands fa-telegram"></i> Asesor Virtual CTT-FISEI</span>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; color: #94a3b8;">Simular como:</span>
+                    <select id="sim-persona" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 4px; outline: none;">
+                      <option value="ESTUDIANTE_UTA|Kevin Caiza">Estudiante UTA (Kevin Caiza)</option>
+                      <option value="PUBLICO_GENERAL|Ing. Patricia Vaca">Público Externo (Patricia Vaca)</option>
+                      <option value="DOCENTE_GRADUADO_UTA|Lic. Daniel Morales">Graduado UTA (Daniel Morales)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="console-body" id="workshop-chat-container">
+                  <div class="console-bubble bot">
+                    Soy el Asesor de Admisiones de CTT-FISEI. Pregúntame por un curso, un horario o pega un código de certificado. También puedes tocar una de las frases de arriba.
+                    <div class="console-meta">Agente IA • Hace un momento</div>
+                  </div>
+                </div>
+
+                <div class="console-input-bar">
+                  <input type="text" id="workshop-input" placeholder="Escribe tu mensaje al bot...">
+                  <button class="btn btn-primary btn-sm" id="btn-workshop-send">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Guión de prueba Card (Matching Image 2) -->
+              <div class="guide-card">
+                <h3 class="guide-title">Guion de prueba</h3>
+                <ul class="guide-list">
+                  <li>
+                    <span class="guide-num">1.</span>
+                    <span>Toca <strong>"cursos abiertos"</strong> para revisar la oferta 2026.</span>
+                  </li>
+                  <li>
+                    <span class="guide-num">2.</span>
+                    <span>Pregunta precio si eres <strong>estudiante UTA</strong> para comprobar el subsidio.</span>
+                  </li>
+                  <li>
+                    <span class="guide-num">3.</span>
+                    <span>Pide inscribirte o deja tu nombre y número de celular.</span>
+                  </li>
+                  <li>
+                    <span class="guide-num">4.</span>
+                    <span>Vuelve a la <strong>Sala</strong>: el prospecto aparecerá automáticamente en <strong>Cerrar cupo</strong> ("A PUNTO DE INSCRIBIRSE").</span>
+                  </li>
+                </ul>
+
+                <div style="margin-top: 10px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius-sm); font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+                  <i class="fa-solid fa-lightbulb" style="color: var(--uta-red); margin-right: 4px;"></i>
+                  <strong>Nota:</strong> Todas las preguntas alimentan el embudo en vivo y actualizan los gráficos de demanda.
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab 6: Configuration & Bot Setup -->
         <div id="tab-config" class="tab-pane" style="display: none;">
           <div class="dashboard-card" style="max-width: 800px; margin: 0 auto;">
             <div class="card-title-group">
@@ -276,85 +361,35 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 10px;">
-              <div style="background: rgba(0, 0, 0, 0.25); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
-                <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--uta-accent);"><i class="fa-brands fa-telegram"></i> Bot de Telegram (@BotFather)</h4>
+              <div style="background: #f8fafc; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--uta-navy);"><i class="fa-brands fa-telegram" style="color: #0284c7;"></i> Bot de Telegram (@BotFather)</h4>
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-                  Pega aquí tu <strong>TELEGRAM_BOT_TOKEN</strong> generado con <code>@BotFather</code>. Al guardarlo, el bot comenzará a responder automáticamente a los usuarios en Telegram.
+                  Ingresa tu <strong>TELEGRAM_BOT_TOKEN</strong> generado con <code>@BotFather</code>. Al guardarlo, el bot comenzará a responder automáticamente a los usuarios en Telegram.
                 </p>
                 <div style="display: flex; gap: 10px;">
-                  <input type="password" id="input-tg-token" placeholder="Ej: 123456789:ABCdefGhIJKlmNoPQRstuVWXyz" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: #fff;">
+                  <input type="password" id="input-tg-token" placeholder="Ej: 123456789:ABCdefGhIJKlmNoPQRstuVWXyz" style="flex: 1; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-primary);">
                   <button class="btn btn-primary" id="btn-save-token">Guardar & Iniciar</button>
                 </div>
-                <div style="margin-top: 10px; font-size: 12px; color: var(--text-dim);" id="token-status-indicator">
+                <div style="margin-top: 10px; font-size: 12px; color: var(--text-muted);" id="token-status-indicator">
                   Estado: Cargando configuración...
                 </div>
               </div>
 
-              <div style="background: rgba(0, 0, 0, 0.25); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
-                <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--accent-cyan);"><i class="fa-solid fa-microchip"></i> Motor de Inteligencia Artificial</h4>
+              <div style="background: #f8fafc; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--uta-navy);"><i class="fa-solid fa-microchip" style="color: var(--uta-red);"></i> Motor de Inteligencia Artificial</h4>
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
                   El sistema cuenta con un motor autónomo experto en CTT-FISEI. Opcionalmente, puedes añadir una <strong>GEMINI_API_KEY</strong> para habilitar generación dinámica adicional.
                 </p>
                 <div style="display: flex; gap: 10px;">
-                  <input type="password" id="input-gemini-key" placeholder="Pega tu Gemini API Key (Opcional)" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: #fff;">
+                  <input type="password" id="input-gemini-key" placeholder="Pega tu Gemini API Key (Opcional)" style="flex: 1; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-primary);">
                   <button class="btn btn-secondary" id="btn-save-gemini">Guardar Llave</button>
                 </div>
-              </div>
-
-              <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 16px;">
-                <h4 style="font-size: 13px; color: #6ee7b7; margin-bottom: 6px;"><i class="fa-solid fa-circle-check"></i> Simulador Web Incorporado</h4>
-                <p style="font-size: 12px; color: var(--text-muted);">
-                  ¿No tienes un token de Telegram a la mano? No te preocupes: puedes usar en todo momento el <strong>Simulador Interactivo</strong> integrado en la esquina derecha para probar conversaciones completas, comprobar la detección de intenciones y ver el cierre de ventas reflejado en este dashboard.
-                </p>
               </div>
             </div>
           </div>
         </div>
 
       </main>
-    </div>
-  </div>
-
-  <!-- Interactive Telegram Bot Simulator Drawer -->
-  <div class="simulator-drawer" id="sim-drawer">
-    <div class="sim-header">
-      <div class="sim-profile">
-        <div class="sim-avatar"><i class="fa-solid fa-robot"></i></div>
-        <div class="sim-profile-info">
-          <h4>Asesor Virtual CTT-FISEI</h4>
-          <p><i class="fa-solid fa-circle" style="font-size: 8px;"></i> En línea | IA Activa</p>
-        </div>
-      </div>
-      <button class="modal-close-btn" id="btn-close-sim">&times;</button>
-    </div>
-
-    <div class="sim-persona-selector">
-      <span>Simular como:</span>
-      <select id="sim-persona">
-        <option value="ESTUDIANTE_UTA|Kevin Caiza">Estudiante UTA (Kevin Caiza)</option>
-        <option value="PUBLICO_GENERAL|Ing. Patricia Vaca">Público Externo (Patricia Vaca)</option>
-        <option value="DOCENTE_GRADUADO_UTA|Lic. Daniel Morales">Graduado UTA (Daniel Morales)</option>
-      </select>
-    </div>
-
-    <div class="sim-messages-body" id="sim-chat-container">
-      <div class="chat-bubble bot">
-        🏛️ ¡Hola! Soy el Asesor de Admisiones e IA de CTT-FISEI UTA. ¿En qué curso tecnológico te gustaría potenciarte hoy?
-        <div class="chat-meta">Agente IA • Hace un momento</div>
-      </div>
-    </div>
-
-    <!-- Quick action chips -->
-    <div class="sim-quick-actions">
-      <button class="sim-quick-btn" data-query="¿Qué costo tiene el curso de Agentic AI GH-600 para estudiante UTA?">💰 Precios GH-600</button>
-      <button class="sim-quick-btn" data-query="¿Qué horarios tiene Cisco CCNA?">⏰ Horarios CCNA</button>
-      <button class="sim-quick-btn" data-query="Quiero inscribirme en el curso de Inteligencia Artificial">🔥 Inscribirme</button>
-      <button class="sim-quick-btn" data-query="Validar certificado UTA-CTT-2026-9041">📜 Validar Certificado</button>
-    </div>
-
-    <div class="sim-input-bar">
-      <input type="text" id="sim-input" placeholder="Escribe tu mensaje al bot...">
-      <button class="btn btn-primary btn-sm" id="btn-sim-send"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 
@@ -367,21 +402,21 @@
       </div>
       <div class="modal-body">
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f8fafc; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
           <div>
-            <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Curso de Interés</span>
-            <h4 id="modal-lead-course" style="font-size: 14px; color: var(--accent-cyan); margin-top: 2px;">-</h4>
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Curso de Interés</span>
+            <h4 id="modal-lead-course" style="font-size: 14px; color: var(--uta-navy); margin-top: 2px;">-</h4>
           </div>
           <div>
-            <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Perfil de Usuario</span>
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Perfil de Usuario</span>
             <div id="modal-lead-type" style="margin-top: 2px;">-</div>
           </div>
           <div>
-            <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Teléfono / WhatsApp</span>
-            <h4 id="modal-lead-phone" style="font-size: 13px; color: #fff; margin-top: 2px;">-</h4>
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Teléfono / WhatsApp</span>
+            <h4 id="modal-lead-phone" style="font-size: 13px; color: var(--text-primary); margin-top: 2px;">-</h4>
           </div>
           <div>
-            <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Nivel de Intención de Compra</span>
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Nivel de Intención de Compra</span>
             <div id="modal-lead-score" style="margin-top: 2px;">-</div>
           </div>
         </div>
@@ -389,10 +424,10 @@
         <!-- Closing Action Quick Links -->
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
           <a id="btn-action-tg" href="#" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;">
-            <i class="fa-brands fa-telegram" style="color: #38bdf8;"></i> Chat Telegram
+            <i class="fa-brands fa-telegram" style="color: #0284c7;"></i> Chat Telegram
           </a>
           <a id="btn-action-wa" href="#" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;">
-            <i class="fa-brands fa-whatsapp" style="color: #4ade80;"></i> Chat WhatsApp
+            <i class="fa-brands fa-whatsapp" style="color: #16a34a;"></i> Chat WhatsApp
           </a>
           <button id="btn-mark-enrolled" class="btn btn-success btn-sm" style="flex: 1; justify-content: center;">
             <i class="fa-solid fa-check-double"></i> Cerrar Venta / Inscrito
@@ -401,7 +436,7 @@
 
         <!-- Conversation History -->
         <div>
-          <h4 style="font-size: 13px; margin-bottom: 8px; color: #fff;">Transcripción de Conversación con el Agente</h4>
+          <h4 style="font-size: 13px; margin-bottom: 8px; color: var(--uta-navy);">Transcripción de Conversación con el Agente</h4>
           <div class="chat-transcript" id="modal-chat-transcript">
             <!-- Messages populated here -->
           </div>
@@ -409,8 +444,8 @@
 
         <!-- Internal Notes for Closing Sales -->
         <div>
-          <h4 style="font-size: 13px; margin-bottom: 8px; color: #fff;">Notas del Asesor para Cierre de Venta</h4>
-          <textarea id="modal-lead-notes" rows="3" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px; color: #fff; font-size: 13px; outline: none;" placeholder="Añade notas del cliente (ej: Confirmó pago por transferencia, solicita factura, etc.)"></textarea>
+          <h4 style="font-size: 13px; margin-bottom: 8px; color: var(--uta-navy);">Notas del Asesor para Cierre de Venta</h4>
+          <textarea id="modal-lead-notes" rows="3" style="width: 100%; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px; color: var(--text-primary); font-size: 13px; outline: none;" placeholder="Añade notas del cliente (ej: Confirmó pago por transferencia, solicita factura, etc.)"></textarea>
           <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
             <button class="btn btn-primary btn-sm" id="btn-save-notes">Guardar Notas</button>
           </div>
@@ -425,7 +460,6 @@
 
   <!-- Scripts -->
   <script src="/static/js/charts.js"></script>
-  <script src="/static/js/simulator.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>
