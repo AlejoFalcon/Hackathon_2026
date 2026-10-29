@@ -1,5 +1,5 @@
 /**
- * Charts module for CTT FISEI Dashboard using Chart.js
+ * Charts module for CTT FISEI Dashboard - Light Mode Professional Theme
  */
 let coursesChartInstance = null;
 let funnelChartInstance = null;
@@ -15,7 +15,7 @@ function renderCoursesChart(topCourses) {
 
   const labels = topCourses.map(c => {
     let t = c.title;
-    if (t.length > 28) t = t.substring(0, 26) + '...';
+    if (t.length > 26) t = t.substring(0, 24) + '...';
     return t;
   });
   const data = topCourses.map(c => c.inquiries_count + (c.interested_count || 0));
@@ -32,23 +32,15 @@ function renderCoursesChart(topCourses) {
         label: 'Consultas e Interés',
         data: data.length ? data : [18, 14, 11, 8, 7],
         backgroundColor: [
-          'rgba(239, 68, 68, 0.75)',
-          'rgba(6, 182, 212, 0.75)',
-          'rgba(99, 102, 241, 0.75)',
-          'rgba(16, 185, 129, 0.75)',
-          'rgba(245, 158, 11, 0.75)',
-          'rgba(168, 85, 247, 0.75)'
+          '#1b3252', // Navy (Image 1)
+          '#9e2222', // Red (Image 1)
+          '#1e3a61',
+          '#b91c1c',
+          '#0284c7',
+          '#16a34a'
         ],
-        borderColor: [
-          '#ef4444',
-          '#06b6d4',
-          '#6366f1',
-          '#10b981',
-          '#f59e0b',
-          '#a855f7'
-        ],
-        borderWidth: 1.5,
-        borderRadius: 8,
+        borderWidth: 0,
+        borderRadius: 6,
       }]
     },
     options: {
@@ -57,23 +49,23 @@ function renderCoursesChart(topCourses) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#131b2e',
-          titleColor: '#fff',
-          bodyColor: '#cbd5e1',
-          borderColor: 'rgba(255,255,255,0.1)',
+          backgroundColor: '#0f172a',
+          titleColor: '#ffffff',
+          bodyColor: '#e2e8f0',
+          borderColor: '#e2e8f0',
           borderWidth: 1,
           padding: 10,
-          cornerRadius: 8
+          cornerRadius: 6
         }
       },
       scales: {
         x: {
           grid: { display: false },
-          ticks: { color: '#94a3b8', font: { size: 11 } }
+          ticks: { color: '#64748b', font: { size: 11, family: 'Poppins' } }
         },
         y: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
-          ticks: { color: '#94a3b8', stepSize: 2 }
+          grid: { color: '#f1f5f9' },
+          ticks: { color: '#64748b', stepSize: 2 }
         }
       }
     }
@@ -84,7 +76,7 @@ function renderFunnelChart(statusDist, userTypes) {
   const ctx = document.getElementById('chartFunnel');
   if (!ctx) return;
 
-  const labels = ['Nuevos', 'Interesados', '🔥 A Punto de Inscribirse', '✅ Inscritos'];
+  const labels = ['Nuevos', 'Interesados', 'A Punto de Inscribirse', 'Inscritos'];
   const data = [
     statusDist['NUEVO'] || 1,
     statusDist['INTERESADO'] || 2,
@@ -103,14 +95,14 @@ function renderFunnelChart(statusDist, userTypes) {
       datasets: [{
         data: data,
         backgroundColor: [
-          'rgba(148, 163, 184, 0.75)',
-          'rgba(6, 182, 212, 0.75)',
-          'rgba(239, 68, 68, 0.85)',
-          'rgba(16, 185, 129, 0.85)'
+          '#94a3b8',
+          '#1b3252',
+          '#9e2222',
+          '#16a34a'
         ],
-        borderColor: '#0f1523',
+        borderColor: '#ffffff',
         borderWidth: 3,
-        hoverOffset: 8
+        hoverOffset: 6
       }]
     },
     options: {
@@ -120,23 +112,21 @@ function renderFunnelChart(statusDist, userTypes) {
         legend: {
           position: 'right',
           labels: {
-            color: '#cbd5e1',
-            font: { size: 12 },
-            padding: 14,
+            color: '#334155',
+            font: { size: 11, family: 'Poppins' },
+            padding: 12,
             usePointStyle: true
           }
         },
         tooltip: {
-          backgroundColor: '#131b2e',
-          titleColor: '#fff',
-          bodyColor: '#cbd5e1',
-          borderColor: 'rgba(255,255,255,0.1)',
-          borderWidth: 1,
+          backgroundColor: '#0f172a',
+          titleColor: '#ffffff',
+          bodyColor: '#e2e8f0',
           padding: 10,
-          cornerRadius: 8
+          cornerRadius: 6
         }
       },
-      cutout: '68%'
+      cutout: '65%'
     }
   });
 }

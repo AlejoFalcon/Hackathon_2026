@@ -1,5 +1,5 @@
 /**
- * Main Application Controller for CTT FISEI AI Sales Dashboard
+ * Main Application Controller for CTT FISEI AI Sales Dashboard (Light Mode Theme)
  */
 let currentLeads = [];
 let activeLeadId = null;
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCertificateValidator();
   setupConfigTab();
   setupLeadModal();
-  initSimulator();
+  setupWorkshop();
 
   // Load initial data
   loadDashboardData();
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(loadDashboardData, 12000);
 });
 
-// Make refresh accessible globally for the simulator
+// Make refresh accessible globally
 window.refreshDashboardData = loadDashboardData;
 
 function showToast(message, type = 'success') {
@@ -45,35 +45,44 @@ function showToast(message, type = 'success') {
 function setupNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
   const panes = document.querySelectorAll('.tab-pane');
+  const btnGoWorkshop = document.getElementById('btn-go-workshop');
+
+  function switchTab(targetId) {
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.getAttribute('data-tab') === targetId);
+    });
+
+    panes.forEach(pane => {
+      pane.style.display = (pane.id === targetId) ? 'block' : 'none';
+    });
+
+    // Update titles
+    const titles = {
+      'tab-dashboard': ['SALA DE ADMISIONES CTT', 'Sala de Control de Admisiones'],
+      'tab-pipeline': ['PIPELINE DE VENTAS', 'Gestión, Calificación y Cierre de Prospectos'],
+      'tab-courses': ['CURSOS DISPONIBLES', 'Catálogo Oficial de Cursos 2026'],
+      'tab-certificates': ['SELLOS Y CERTIFICADOS', 'Verificador Institucional de Códigos QR'],
+      'tab-workshop': ['TALLER DEL AGENTE', 'Prueba al Asesor Virtual sin salir de la sala'],
+      'tab-config': ['CONFIGURACIÓN DEL SISTEMA', 'Parámetros del Bot de Telegram y Modelos IA']
+    };
+    if (titles[targetId]) {
+      document.getElementById('page-subtitle-tag').textContent = titles[targetId][0];
+      document.getElementById('page-title').textContent = titles[targetId][1];
+    }
+
+    if (targetId === 'tab-courses') loadCourses();
+  }
 
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const targetId = item.getAttribute('data-tab');
-      if (!targetId || targetId === 'tab-simulator') return; // Simulator handled separately
-
-      navItems.forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-
-      panes.forEach(pane => {
-        pane.style.display = (pane.id === targetId) ? 'block' : 'none';
-      });
-
-      // Update titles
-      const titles = {
-        'tab-dashboard': ['Panel de Control & Inteligencia Comercial', 'Monitoreo en tiempo real de prospectos y cierre de admisiones'],
-        'tab-pipeline': ['Pipeline de Ventas y CRM', 'Gestión, calificación y seguimiento activo de prospectos'],
-        'tab-courses': ['Catálogo de Cursos Tecnológicos', 'Programas académicos sincronizados con el sitio oficial CTT FISEI'],
-        'tab-certificates': ['Verificación de Certificados', 'Validación de códigos QR y autenticidad académica institucional'],
-        'tab-config': ['Configuración del Sistema', 'Parámetros del Bot de Telegram y Conexión de Modelos IA']
-      };
-      if (titles[targetId]) {
-        document.getElementById('page-title').textContent = titles[targetId][0];
-        document.getElementById('page-subtitle').textContent = titles[targetId][1];
-      }
-
-      if (targetId === 'tab-courses') loadCourses();
+      if (targetId) switchTab(targetId);
     });
   });
+
+  if (btnGoWorkshop) {
+    btnGoWorkshop.addEventListener('click', () => switchTab('tab-workshop'));
+  }
 }
 
 // Fetch metrics & leads
@@ -118,7 +127,7 @@ function updateKPICards(metrics) {
   }
 }
 
-// Hot Leads (A Punto de Inscribirse)
+// Hot Leads (Cerrar Cupo)
 function renderHotLeads(leads) {
   const container = document.getElementById('hot-leads-container');
   if (!container) return;
@@ -127,9 +136,9 @@ function renderHotLeads(leads) {
 
   if (hotLeads.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">
+      <div style="grid-column: 1 / -1; padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">
         <i class="fa-solid fa-bell-slash" style="font-size: 24px; color: var(--text-dim); margin-bottom: 8px; display: block;"></i>
-        Actualmente no hay prospectos en estado de cierre inmediato. Interactúa con el bot para ver alertas en vivo.
+        Actualmente no hay prospectos en estado de cierre inmediato. Interactúa en el Taller para generar prospectos en vivo.
       </div>
     `;
     return;
@@ -140,7 +149,6 @@ function renderHotLeads(leads) {
     const course = lead.course_title || 'Curso Tecnológico';
     const tgUsername = lead.username ? `@${lead.username}` : `ID: ${lead.telegram_id}`;
     const userTypeStr = formatUserType(lead.user_type);
-    const phone = lead.phone ? lead.phone : 'No registrado';
     const waLink = lead.phone ? `https://wa.me/593${lead.phone.replace(/^0/, '')}?text=Hola%20${encodeURIComponent(lead.full_name)},%20te%20saludamos%20del%20CTT-FISEI%20UTA%20respecto%20a%20tu%20inscripción.` : '#';
 
     return `
@@ -170,16 +178,16 @@ function renderHotLeads(leads) {
         <div class="hot-card-actions">
           ${lead.username ? `
             <a href="https://t.me/${lead.username}" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;" title="Abrir chat en Telegram">
-              <i class="fa-brands fa-telegram" style="color: #38bdf8;"></i> Telegram
+              <i class="fa-brands fa-telegram" style="color: #0284c7;"></i> Telegram
             </a>
           ` : ''}
           ${lead.phone ? `
             <a href="${waLink}" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;" title="Contactar por WhatsApp">
-              <i class="fa-brands fa-whatsapp" style="color: #4ade80;"></i> WhatsApp
+              <i class="fa-brands fa-whatsapp" style="color: #16a34a;"></i> WhatsApp
             </a>
           ` : ''}
           <button class="btn btn-primary btn-sm btn-open-lead" data-id="${lead.id}" style="flex: 1; justify-content: center;">
-            <i class="fa-solid fa-handshake"></i> Cerrar Venta
+            <i class="fa-solid fa-handshake"></i> Cerrar Cupo
           </button>
         </div>
       </div>
@@ -254,15 +262,15 @@ function renderCRMTable(leads) {
     return `
       <tr>
         <td>
-          <div style="font-weight: 700; color: #fff;">${escapeHtml(lead.full_name || 'Prospecto')}</div>
-          <div style="font-size: 11px; color: var(--text-dim);">
+          <div style="font-weight: 700; color: var(--uta-navy);">${escapeHtml(lead.full_name || 'Prospecto')}</div>
+          <div style="font-size: 11px; color: var(--text-muted);">
             <i class="fa-brands fa-telegram"></i> @${escapeHtml(lead.username || lead.telegram_id)}
             ${lead.phone ? ` • <i class="fa-solid fa-phone"></i> ${lead.phone}` : ''}
           </div>
         </td>
         <td><span class="badge-user-type">${userTypeStr}</span></td>
         <td style="max-width: 180px;">
-          <div style="font-weight: 600; color: var(--accent-cyan); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(lead.course_title || 'No definido')}">
+          <div style="font-weight: 600; color: var(--uta-navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(lead.course_title || 'No definido')}">
             ${escapeHtml(lead.course_title || 'General')}
           </div>
         </td>
@@ -278,15 +286,15 @@ function renderCRMTable(leads) {
           <span class="badge ${badgeStatusClass}">${escapeHtml(lead.status)}</span>
         </td>
         <td>
-          <span style="font-size: 11px; font-weight: 700; color: ${lead.closure_probability === 'ALTA' ? '#f87171' : (lead.closure_probability === 'MEDIA' ? '#38bdf8' : '#94a3b8')}">
+          <span style="font-size: 11px; font-weight: 700; color: ${lead.closure_probability === 'ALTA' ? 'var(--uta-red)' : (lead.closure_probability === 'MEDIA' ? 'var(--uta-navy)' : 'var(--text-muted)')}">
             ${lead.closure_probability || 'MEDIA'}
           </span>
         </td>
-        <td style="max-width: 220px; color: var(--text-muted); font-size: 12px;">
+        <td style="max-width: 220px; color: var(--text-secondary); font-size: 12px;">
           <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(lead.last_message || '')}">
             "${escapeHtml(lead.last_message || 'Sin mensajes')}"
           </div>
-          <small style="font-size: 10px; color: var(--text-dim);">${timeAgo}</small>
+          <small style="font-size: 10px; color: var(--text-muted);">${timeAgo}</small>
         </td>
         <td>
           <button class="btn btn-secondary btn-sm btn-open-crm-lead" data-id="${lead.id}">
@@ -332,13 +340,40 @@ function formatTimeAgo(isoDate) {
   return `Hace ${Math.floor(diff / 86400)} d`;
 }
 
-// Courses Tab
+// Helper to parse title into Image 1 style: Big Brand Word + Subtitle
+function parseCourseVisualTitle(rawTitle, id) {
+  const t = rawTitle.toUpperCase();
+  if (t.includes('CCNA')) {
+    return { main: 'CCNA', sub: 'INTRODUCCIÓN A LAS REDES', bg: 'bg-navy' };
+  } else if (t.includes('LINUX')) {
+    return { main: 'LINUX', sub: 'LINUX ESSENTIALS', bg: 'bg-navy' };
+  } else if (t.includes('PYTHON 1')) {
+    return { main: 'PYTHON 1', sub: 'FUNDAMENTOS DE PYTHON', bg: 'bg-red' };
+  } else if (t.includes('PYTHON 2')) {
+    return { main: 'PYTHON 2', sub: 'PROGRAMACIÓN INTERMEDIA', bg: 'bg-navy' };
+  } else if (t.includes('GH-600') || t.includes('AGENTIC AI') || t.includes('GITHUB')) {
+    return { main: 'AGENTIC AI', sub: 'GITHUB COPILOT & MCP (GH-600)', bg: 'bg-red' };
+  } else if (t.includes('ARDUINO')) {
+    return { main: 'ARDUINO', sub: 'CERTIFICATION PROGRAM', bg: 'bg-navy' };
+  } else if (t.includes('RECURSOS HUMANOS') || t.includes('RRHH')) {
+    return { main: 'IA RRHH', sub: 'GESTIÓN DEL TALENTO', bg: 'bg-red' };
+  } else if (t.includes('PROTECCIÓN DE DATOS')) {
+    return { main: 'PROTECCIÓN DATOS', sub: 'LEGISLACIÓN EN ECUADOR', bg: 'bg-navy' };
+  } else if (t.includes('AMENAZAS') || t.includes('CIBERNÉTICAS') || t.includes('HACKER')) {
+    return { main: 'CIBERSEGURIDAD', sub: 'DEFENSA DE AMENAZAS', bg: 'bg-red' };
+  }
+  // Default alternating
+  const isEven = id % 2 === 0;
+  return { main: `CURSO ${id}`, sub: rawTitle.substring(0, 30), bg: isEven ? 'bg-navy' : 'bg-red' };
+}
+
+// Courses Tab - EXACTLY MATCHING USER'S IMAGE 1
 function setupCoursesTab() {
   const syncBtn = document.getElementById('btn-sync-catalog');
   const syncTopBtn = document.getElementById('btn-sync-courses');
 
   const handleSync = async () => {
-    showToast('Iniciando sincronización con CTT FISEI...', 'success');
+    showToast('Iniciando sincronización con ctt-talleresfisei.uta.edu.ec...', 'success');
     try {
       const resp = await fetch('/api/courses/scrape', { method: 'POST' });
       const data = await resp.json();
@@ -362,54 +397,45 @@ async function loadCourses() {
     if (!resp.ok) return;
     const courses = await resp.json();
 
-    container.innerHTML = courses.map(c => {
-      const statusBadge = c.status === 'ABIERTO' 
-        ? '<span class="badge badge-closed"><i class="fa-solid fa-door-open"></i> Abierto</span>'
-        : '<span class="badge badge-new">Cerrado</span>';
+    container.innerHTML = courses.map((c, index) => {
+      const visual = parseCourseVisualTitle(c.title, c.id);
+      const codePill = `CURSO ${String(c.id).padStart(2, '0')} · 2026`;
+      const hoursPill = `${c.hours} HORAS`;
 
       return `
-        <div class="course-card">
-          <div>
-            <div class="course-header-badge">
-              <span class="course-category-tag">${escapeHtml(c.category || 'Tecnología')}</span>
-              ${statusBadge}
+        <div class="course-item-card">
+          <!-- Upper Header Banner matching Image 1 -->
+          <div class="course-banner ${visual.bg}">
+            <div class="course-pill-top">${codePill}</div>
+            <div class="course-banner-titles">
+              <div class="course-banner-main">${visual.main}</div>
+              <div class="course-banner-sub">${visual.sub}</div>
             </div>
-            <h3 class="course-title" style="margin-top: 8px;">${escapeHtml(c.title)}</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
-              ${escapeHtml((c.description || '').substring(0, 140))}...
-            </p>
+            <div class="course-pill-hours">${hoursPill}</div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div class="course-meta-row">
-              <span><i class="fa-solid fa-clock"></i> ${c.hours} Horas</span>
-              <span>•</span>
-              <span><i class="fa-solid fa-laptop"></i> ${escapeHtml(c.modality || 'Virtual')}</span>
-              <span>•</span>
-              <span><i class="fa-solid fa-fire"></i> ${c.inquiries_count || 0} consultas</span>
+          <!-- Lower Body Section matching Image 1 -->
+          <div class="course-card-body">
+            <div class="course-meta-top">
+              <span><i class="fa-solid fa-users"></i> ${escapeHtml(c.status || 'ABIERTO')}</span>
+              <span><i class="fa-regular fa-clock"></i> ${c.hours} HORAS</span>
             </div>
 
-            <div class="price-comparison-box">
-              <div class="price-item uta">
-                <small>Estudiante UTA</small>
-                <span>$${(c.price_uta_student || 40).toFixed(2)}</span>
-              </div>
-              <div class="price-item">
-                <small>Graduado UTA</small>
-                <span>$${(c.price_uta_staff || 50).toFixed(2)}</span>
-              </div>
-              <div class="price-item">
-                <small>Público General</small>
-                <span>$${(c.price_general || 60).toFixed(2)}</span>
-              </div>
+            <a href="${c.registration_url || 'https://ctt-talleresfisei.uta.edu.ec/course.php'}" target="_blank" class="course-card-title-link">
+              ${escapeHtml(c.title)}
+            </a>
+
+            <div class="course-price-pill-row">
+              <div>Estudiantes UTA: <span class="p-uta">$${(c.price_uta_student || 40).toFixed(2)}</span></div>
+              <div>Público: <span class="p-gen">$${(c.price_general || 60).toFixed(2)}</span></div>
             </div>
 
             <div style="display: flex; gap: 8px; margin-top: 4px;">
               <a href="${c.registration_url || 'https://ctt-talleresfisei.uta.edu.ec/course.php'}" target="_blank" class="btn btn-primary btn-sm" style="flex: 1; justify-content: center;">
-                <i class="fa-solid fa-file-pen"></i> Formulario UTA
+                INSCRIBIRME
               </a>
               <button class="btn btn-secondary btn-sm btn-simulate-course" data-title="${escapeHtml(c.title)}">
-                <i class="fa-solid fa-robot"></i> Probar en Bot
+                <i class="fa-solid fa-terminal"></i> Probar en Taller
               </button>
             </div>
           </div>
@@ -420,9 +446,11 @@ async function loadCourses() {
     container.querySelectorAll('.btn-simulate-course').forEach(btn => {
       btn.addEventListener('click', () => {
         const title = btn.getAttribute('data-title');
-        const input = document.getElementById('sim-input');
-        if (input) input.value = `Quiero información sobre ${title}`;
-        document.getElementById('sim-drawer')?.classList.add('open');
+        const workshopInput = document.getElementById('workshop-input');
+        if (workshopInput) workshopInput.value = `Quiero información sobre ${title}`;
+        
+        // Switch to workshop tab
+        document.querySelector('.nav-item[data-tab="tab-workshop"]')?.click();
       });
     });
 
@@ -456,28 +484,28 @@ function setupCertificateValidator() {
           <div class="cert-card-preview">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span class="badge badge-closed"><i class="fa-solid fa-circle-check"></i> Certificado Válido y Oficial</span>
-              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #6ee7b7;">${escapeHtml(cert.cert_code)}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--uta-navy); font-weight: 700;">${escapeHtml(cert.cert_code)}</span>
             </div>
 
             <div>
-              <h3 style="font-size: 18px; color: #fff;">${escapeHtml(cert.student_name)}</h3>
-              <p style="font-size: 12px; color: var(--text-dim);">Cédula / Identificación: ${escapeHtml(cert.student_cedula || 'Registrada')}</p>
+              <h3 style="font-size: 18px; color: var(--uta-navy); font-weight: 800;">${escapeHtml(cert.student_name)}</h3>
+              <p style="font-size: 12px; color: var(--text-muted);">Cédula / Identificación: ${escapeHtml(cert.student_cedula || 'Registrada')}</p>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm);">
-              <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase;">Programa Aprobado</div>
-              <h4 style="font-size: 15px; color: var(--accent-cyan); margin-top: 2px;">${escapeHtml(cert.course_name)}</h4>
-              <div style="display: flex; gap: 14px; margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+            <div style="background: var(--bg-secondary); padding: 14px; border-radius: var(--radius-sm);">
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Programa Aprobado</div>
+              <h4 style="font-size: 15px; color: var(--uta-navy); margin-top: 2px;">${escapeHtml(cert.course_name)}</h4>
+              <div style="display: flex; gap: 14px; margin-top: 8px; font-size: 12px; color: var(--text-secondary);">
                 <span><i class="fa-solid fa-clock"></i> ${cert.hours} Horas Académicas</span>
                 <span>•</span>
-                <span><i class="fa-solid fa-star"></i> Nota: ${cert.grade}/10.0</span>
+                <span><i class="fa-solid fa-star" style="color: var(--accent-amber);"></i> Nota: ${cert.grade}/10.0</span>
                 <span>•</span>
                 <span><i class="fa-solid fa-calendar"></i> ${cert.issue_date}</span>
               </div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-              <small style="color: var(--text-dim); font-size: 11px;">Avalado por el CTT FISEI - Universidad Técnica de Ambato</small>
+              <small style="color: var(--text-muted); font-size: 11px;">Avalado por el CTT FISEI - Universidad Técnica de Ambato</small>
               <a href="${cert.qr_verification_url || '#'}" target="_blank" class="btn btn-secondary btn-sm">
                 <i class="fa-solid fa-qrcode"></i> Validar en Portal Oficial
               </a>
@@ -486,8 +514,8 @@ function setupCertificateValidator() {
         `;
       } else {
         resultBox.innerHTML = `
-          <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 20px; text-align: left;">
-            <h4 style="color: #fca5a5; font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-triangle-exclamation"></i> No se encontró registro inmediato</h4>
+          <div style="background: #fff5f5; border: 1px solid #fed7d7; border-radius: var(--radius-md); padding: 20px; text-align: left;">
+            <h4 style="color: var(--uta-red); font-size: 14px; margin-bottom: 6px;"><i class="fa-solid fa-triangle-exclamation"></i> No se encontró registro inmediato</h4>
             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">${data.message}</p>
             <a href="${data.official_url}" target="_blank" class="btn btn-primary btn-sm">
               <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Portal de Validación CTT
@@ -564,15 +592,15 @@ async function fetchConfigStatus() {
     const indicator = document.getElementById('token-status-indicator');
     if (indicator) {
       if (cfg.telegram_bot_active) {
-        indicator.innerHTML = `<span style="color: var(--accent-emerald);"><i class="fa-solid fa-circle-check"></i> Bot de Telegram Activo y Polling</span> (${cfg.telegram_bot_token_status})`;
+        indicator.innerHTML = `<span style="color: var(--accent-emerald); font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Bot de Telegram Activo y Conectado</span> (${cfg.telegram_bot_token_status})`;
       } else {
-        indicator.innerHTML = `<span style="color: var(--text-dim);"><i class="fa-solid fa-circle-xmark"></i> Bot de Telegram Inactivo</span> (${cfg.telegram_bot_token_status})`;
+        indicator.innerHTML = `<span style="color: var(--text-muted);"><i class="fa-solid fa-circle-xmark"></i> Bot de Telegram no configurado</span> (Usando Simulador del Taller)`;
       }
     }
 
     const botStatusText = document.getElementById('bot-status-text');
     if (botStatusText) {
-      botStatusText.textContent = cfg.telegram_bot_active ? 'Telegram + Web Activo' : 'Simulador Web Activo';
+      botStatusText.textContent = cfg.telegram_bot_active ? 'Telegram + Taller Activo' : 'En línea (Taller Activo)';
     }
   } catch (e) {}
 }
@@ -699,6 +727,146 @@ async function openLeadModal(leadId) {
   }
 }
 
+// Taller del Agente (Interactive Workshop Matching Image 2)
+function setupWorkshop() {
+  const input = document.getElementById('workshop-input');
+  const btnSend = document.getElementById('btn-workshop-send');
+  const chatContainer = document.getElementById('workshop-chat-container');
+  const personaSelect = document.getElementById('sim-persona');
+
+  // Shortcut Chips (Image 2)
+  document.querySelectorAll('.workshop-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.getAttribute('data-query');
+      if (q && input) {
+        input.value = q;
+        sendWorkshopMessage();
+      }
+    });
+  });
+
+  if (btnSend) btnSend.addEventListener('click', sendWorkshopMessage);
+  if (input) {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendWorkshopMessage();
+    });
+  }
+
+  async function sendWorkshopMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Append user bubble
+    appendWorkshopBubble('user', text);
+    input.value = '';
+
+    const personaVal = personaSelect ? personaSelect.value : 'ESTUDIANTE_UTA|Kevin Caiza';
+    const [userType, userName] = personaVal.split('|');
+
+    const typingId = showWorkshopTyping();
+
+    try {
+      const resp = await fetch('/api/chat/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          user_id: userName.toLowerCase().replace(/[^a-z0-9]/g, '_'),
+          user_name: userName,
+          user_type: userType
+        })
+      });
+
+      removeWorkshopTyping(typingId);
+
+      if (!resp.ok) {
+        appendWorkshopBubble('bot', '⚠️ Error al procesar tu solicitud con el agente.');
+        return;
+      }
+
+      const data = await resp.json();
+      appendWorkshopBotResponse(data.bot_response, data.analysis);
+
+      // Auto-refresh Dashboard metrics and leads list in real-time!
+      loadDashboardData();
+
+    } catch (e) {
+      removeWorkshopTyping(typingId);
+      appendWorkshopBubble('bot', '⚠️ Error de conexión con el servidor.');
+      console.error(e);
+    }
+  }
+
+  function appendWorkshopBubble(sender, text) {
+    const bubble = document.createElement('div');
+    bubble.className = `console-bubble ${sender}`;
+    bubble.innerHTML = `
+      <div>${escapeHtml(text)}</div>
+      <div class="console-meta">${sender === 'user' ? 'Tú' : 'Agente IA'} • Justo ahora</div>
+    `;
+    chatContainer.appendChild(bubble);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function appendWorkshopBotResponse(markdownText, analysis) {
+    const bubble = document.createElement('div');
+    bubble.className = 'console-bubble bot';
+    
+    let formatted = formatMarkdown(markdownText);
+    
+    let analysisTag = '';
+    if (analysis && analysis.intent_score >= 0.75) {
+      analysisTag = `
+        <div style="margin-top: 8px; padding: 6px 10px; background: rgba(220, 38, 38, 0.2); border: 1px solid rgba(220, 38, 38, 0.4); border-radius: 6px; font-size: 11px; color: #fca5a5;">
+          🔥 <strong>Detección IA:</strong> ${analysis.intent} (Score: ${(analysis.intent_score * 100).toFixed(0)}%)
+          ${analysis.status ? `• Estado: <strong>${analysis.status}</strong>` : ''}
+        </div>
+      `;
+    }
+
+    bubble.innerHTML = `
+      <div>${formatted}</div>
+      ${analysisTag}
+      <div class="console-meta">Agente IA CTT • Justo ahora</div>
+    `;
+    chatContainer.appendChild(bubble);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function showWorkshopTyping() {
+    const id = 'typing_' + Date.now();
+    const ind = document.createElement('div');
+    ind.id = id;
+    ind.className = 'console-bubble bot';
+    ind.style.fontStyle = 'italic';
+    ind.style.color = '#94a3b8';
+    ind.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Asesor CTT está escribiendo...';
+    chatContainer.appendChild(ind);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    return id;
+  }
+
+  function removeWorkshopTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+}
+
 function escapeHtml(string) {
   return String(string || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function formatMarkdown(text) {
+  if (!text) return '';
+  let html = escapeHtml(text);
+  // Bold **text**
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Bullet points
+  html = html.replace(/\n• (.*?)/g, '<br>• $1');
+  html = html.replace(/\n(\d+️⃣|\d+\.) (.*?)/g, '<br>$1 $2');
+  // Links [title](url)
+  html = html.replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, '<a href="$2" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: 600;">$1</a>');
+  // Newlines
+  html = html.replace(/\n/g, '<br>');
+  return html;
 }
